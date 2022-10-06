@@ -18,12 +18,21 @@ public class UserDaoImp implements UserDao {
    public void add(User user) {
       sessionFactory.getCurrentSession().save(user);
    }
-
    @Override
    @SuppressWarnings("unchecked")
    public List<User> listUsers() {
-      TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
+      TypedQuery<User> query= sessionFactory.getCurrentSession().createQuery("FROM User");
       return query.getResultList();
+   }
+
+   @Override
+   @SuppressWarnings("unchecked")
+   public User getUserOwnCar(String model, int series) {
+      TypedQuery<User> query = sessionFactory.getCurrentSession()
+              .createQuery("FROM User WHERE userCar.model= :modelName AND userCar.series= :serialName")
+              .setParameter("modelName", model)
+              .setParameter("serialName", series);
+      return query.getSingleResult();
    }
 
 }
